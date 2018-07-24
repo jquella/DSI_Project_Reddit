@@ -67,6 +67,27 @@ Now we are ready to move onto the next step!
 
 #### Standardizing Author Team Flair
 
+**Author Flair was incredibly varied**
+- Two different types: player flair, and team flair
+- >1K unique player flairs, 117 team flairs
+- *Player flair:* `[CLE] Kendrick Perkins`
+- *Team flair:* `Cavaliers`
+
+**So how do we reduce to an analyzable sample?**
+- Regex word boundary matching on Team Flair
+	- e.g. "Cavaliers bandwagon" put through this process:
+	```
+	long_flair['flair_text'].map(lambda x: re.findall('^\w+', x)[0].lower()).unique()
+	```
+	returns "cavaliers"
+- Map function slicing on Player Flair
+	- Similarly, "[CLE] Kendrick Perkins"
+	```
+	short_flair = df[df.flair_text.str.contains('\[')]['flair_text'].map(lambda x: x[1:4])
+	```
+	returns "CLE"
+- Combine to 30 clean team flairs (+none, +other) with dictionary map!
+
 
 
 For this exercise, I also decided to drop all categorical variables to be able to more easily run different linear regression types. Some features appeared numerical, but were in fact categorical (e.g. `Year Built`).
