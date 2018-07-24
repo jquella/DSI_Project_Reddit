@@ -135,7 +135,8 @@ A-ha! That turned out to be mainly true for Golden State and Houston. I think Cl
 <a id='evaluate_model'></a>
 ### Evaluate Model.
 
-*Model evaluation*
+*Model evaluation*  
+
 **Cross-validated accuracy score**
 Final mean score: 55%    :(
 
