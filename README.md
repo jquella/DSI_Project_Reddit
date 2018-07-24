@@ -46,6 +46,10 @@ Due to size of data being pulled, the process needed to be chunked into 4 separa
 <a id='explore_data'></a>
 ### Explore Data.
 
+Example data, once in dataframe: 
+
+<img src="https://i.imgur.com/FGHXaeP.png">
+
 #### Finding and Filling Null Values
 First I took a look at all of the columns to check out the null values in the dataset, specifically trying to find columns which were:
 	- Overwhelmingly null, and should be dropped, or
@@ -92,18 +96,22 @@ Lastly, I used a dictionary mapping to clean all 30 team flairs (+none, +other) 
 <img src="https://i.imgur.com/hseqA9M.png">
 
 
+#### Exploring Data Further.
 
-For this exercise, I also decided to drop all categorical variables to be able to more easily run different linear regression types. Some features appeared numerical, but were in fact categorical (e.g. `Year Built`).
+I explored the mean comment score by author team flair to get a better sense of any prevailing trends.
 
-The next step was to explore *feature correlations*. I did this by making a heatmap of the correlation matrix of the remaining features:
+<img src="https://i.imgur.com/724mGXb.png">
 
-<img src="https://i.imgur.com/3MP09gR.png">
+**Key Takeaways**
+- Four conference Finals game and post-game threads contained > 60% of all comments 
+- Many players complained of referees “rigging” WCF Game 7 in GSW’s favor
+- People on the internet don’t like James Harden
+- Grizzlies poor score likely because of variability due to low # of total comments 
 
-While a couple of features look highly correlated, we will be using some regularization techniques to drop those later.
 
-Lastly, I needed to find out if there were still *null values* sticking around, which there were. The most important feature, `Lot Frontage`, we imputed by `Lot Shape`, which seemed intuitive.
+Next I looked 
 
-<img src="https://i.imgur.com/WgNTP4a.png">
+<img src="https://i.imgur.com/jTKwV57.png">
 
 <a id='model_data'></a>
 ### Model Data.
