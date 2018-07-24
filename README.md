@@ -107,32 +107,37 @@ I explored the mean comment score by author team flair to get a better sense of 
 - Many players complained of referees “rigging” WCF Game 7 in GSW’s favor
 - People on the internet don’t like James Harden
 - Grizzlies poor score likely because of variability due to low # of total comments 
+- People felt bad for the Raptors, and a lot of those comments were self-deprecating jokes
 
 
-Next I looked 
+Next I looked at *total* comments by team flair, to see if there was any correlation between volume of comments and score (e.g., most popular team flairs get downvoted more).
 
 <img src="https://i.imgur.com/jTKwV57.png">
+
+A-ha! That turned out to be mainly true for Golden State and Houston. I think Cleveland escaped the downvote hate because it was already seen as an underdog against whichever Western Conference team it would play in the Finals.
 
 <a id='model_data'></a>
 ### Model Data.
 
-I ran four different Linear Regression model types: 
-1. *Linear Regression:* default
-2. *Ridge Regression:* penalizes wrong guesses, but will not zero out coefficients.
-3. *Lasso Regression:* penalizes wrong guesses, but *may* drop coefficients.
-4. *Elastic Net:* Balance between *Ridge* and *Lasso*.
+*Feature Selection and Engineering*
+- Features chosen: All binary features + author flair + comment text
+- Process:
+	- Dummieed variables for author flair
+	- CountVectorized comment text data columns
+	- Combined all columns back together
+
+*Model selection*
+- Due to computational constraints, only 50% of the data was sampled from non-game thread comments -- around 41K total
+- RandomForestClassifier was chosen due to large number of text feature columns (approx. 21K) and feature weight given
+
+
 
 <a id='evaluate_model'></a>
 ### Evaluate Model.
 
-*Scores for all models*
-
- **Model** | **R^2 Score (Train)** | **R^2 Score (Test)** 
- --- |	--- | --- 
- Linear Regression 	|	0.726	| 0.675 
- Ridge Regression		|	0.773	| 0.700 
- Lasso Regression 		|	0.775	| 0.698 
- Elastic Net 			|	0.774	| 0.697 
+*Model evaluation*
+**Cross-validated accuracy score**
+Final mean score: 55%    :(
 
 These R^2 scores are not ideal. While being able to explain nearly 80% of the variance in house price seems good, it can likely be improved. This mainly seems to be in part due to a large outlier in the predictions:
 
