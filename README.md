@@ -140,29 +140,57 @@ A-ha! That turned out to be mainly true for Golden State and Houston. I think Cl
 **Cross-validated accuracy score**
 Final mean score: 55%    :(
 
-These R^2 scores are not ideal. While being able to explain nearly 80% of the variance in house price seems good, it can likely be improved. This mainly seems to be in part due to a large outlier in the predictions:
+This R^2 score is...not good. Some thoughts on why:
+- Was not able to use the full dataset
+- Text is a _much_ more variable feature and is harder to predict
+	- Maybe TF-IDF or multiple n-grams would be more beneficial in illuminating top text
+- Comment age (i.e., getting in early) may be a factor and was not explored at this time
 
-<img src="https://i.imgur.com/7irAXIT.png">
+**Feature Importance**
+Our RandomForestClassifier (RF) returns _feature importances_, that is, which were the strongest predictors in determining whether a comment score would be high or low. See below for further detail.
 
-In exploring the data further, it seems that this was likely due to a single outlier data point in one of the strongest features: `GrLivArea` - or above ground living area.
-<img src="https://i.imgur.com/7wVnQJe.png">
+<img src="https://i.imgur.com/ihCdYkn.png">
 
-The next iterations of models should perhaps account for outliers in some way to generate better predictions.
+_What features were most important in generating a top comment?_
+1. Being a top comment, rather than a reply, held the most predictive weight of any feature
+2. Next was “other” or “no” flair
+	- Commenters tend to upvote/downvote based on context of fandom rather than on content alone
+3. Just mention “Lebron” by name
+
 
 <a id='answer_question'></a>
 ### Answer Question.
 
 **Q: Were we able to predict home prices?** 
 
-**A:** Somewhat. The R^2 scores  were fairly low (70-80% range) compared to what I think is possible to achieve. That said, I *did* achieve the objective of following the data science workflow, improving EDA, plotting and modeling skills, and was able to predict prices within the expected range. I just wouldn't make an investment strategy out of it :)
+**A:** Not very well. But we learned a lot. Some *Key Findings* and *Next Steps* below to illustrate what we learned, and how to improve.
+
+
+**Key Findings**
+1. Stake your own claim
+	- Being a top comment, rather than a reply, were most important factor in determining comment score
+2. Haters gonna hate
+	- GSW and HOU fans got downvoted the most
+3. Show your stripes
+	- Comments with “no flair” scored poorly, so show your fandom! 
+
 
 **Next steps**
-1. More feature selection and engineering work.
-    - Involve more categorical variables
-    - Have separate models for outliers
-    - Try polynomial features on more data
-    - Use `itertools.combinations` to try more variations of feature combos
-2. Use `GridSearchCV` to more exhaustively tune hyper-parameters
-3. Try different models!
+1. More computing power!
+	- Running on AWS or similar would enable faster analysis
+	- GridSearchCV unavailable due to time constraints; hyper-parameter tuning could improve model 
+2. 	Try other models!
+	- LogisticRegression and SVM may improve outcomes 
+	- N-gram text feature analysis
 
-[Jupyter notebook with full code available here](https://github.com/jquella/DSI_Project_Ames/blob/master/project-2_JQ_take2.ipynb)
+
+### Bonus! 
+If you've made it this far, congratulations! I also generated some "top" comments via Markov chains, taken from some of the top-scoring comments I pulled. Here are some of my favorites:
+- Am I supposed to be present to witness the inevitable.
+- ﻿LeBron should just rent a place in the US and poster random dudes?
+- Why lose in 7 when you can lose in 7 when you can lose in 7 when you can lose in 4 #efficiency
+- Is it me or is harden pushing off like every loose ball. Nonstop hustle. Mad respect.
+
+
+
+[Jupyter notebook with full code available here](https://github.com/jquella/DSI_Project_Reddit/blob/master/starter-code_jq-_v2.ipynb)
