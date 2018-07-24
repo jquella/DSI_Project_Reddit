@@ -88,6 +88,7 @@ Now we are ready to move onto the next step!
 	returns "CLE"
 
 Lastly, I used a dictionary mapping to clean all 30 team flairs (+none, +other) to a standardized list:
+
 <img src="https://i.imgur.com/hseqA9M.png">
 
 
