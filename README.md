@@ -86,7 +86,9 @@ Now we are ready to move onto the next step!
 	short_flair = df[df.flair_text.str.contains('\[')]['flair_text'].map(lambda x: x[1:4])
 	```
 	returns "CLE"
-- Combine to 30 clean team flairs (+none, +other) with dictionary map!
+
+Lastly, I used a dictionary mapping to clean all 30 team flairs (+none, +other) to a standardized list:
+<img src="https://i.imgur.com/hseqA9M.png">
 
 
 
