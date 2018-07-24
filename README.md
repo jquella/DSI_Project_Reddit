@@ -8,7 +8,8 @@ _Jamie Quella - 6/4/18_
 1. Collecting data by via an API
 2. Building a binary predictor on text data.
 
-As we discussed earlier in the course, there are two components to starting a data science problem: the problem statement, and acquiring the data.
+We will do so by scraping or pulling Reddit comments on 'hot' threads and building a classification model that predicts whether or not a given Reddit post will have above or below the _median_ number of comments.
+
 
 **Process:** 
 1. [Define Question.](#define_question)
@@ -20,23 +21,53 @@ As we discussed earlier in the course, there are two components to starting a da
 
 <a id='define_question'></a>
 ### Define the Question.
-**Can we predict housing prices in Ames, IA to make sure I'm not underselling my home given its features?**
+_What characteristics of a comment on the NBA Reddit are most predictive of the overall interaction (as measured by comment score)?_
+
 
 <a id='gather_data'></a>
 ### Gather Data.
-All data collected from [Kaggle competition page](https://www.kaggle.com/c/house-prices-advanced-regression-techniques "Ames Kaggle Competition").
+Method for acquiring the data will be scraping the 'hot' threads as listed on the [NBA subreddit](https://www.reddit.com/r/nba/). 
 
-In addition, I wrote some handy functions for EDA/cleaning and plotting to use later, found in the `notebook_starter.py` and `plotter.py` files.
+To do so, I used [PRAW: THe Python Reddit API Wrapper](https://praw.readthedocs.io/en/latest/). PRAW allows anyone with Reddit Developer credentials to access the API and pull top posts, comment threads, and other information, compared with using the `requests` library, which must access the raw JSON for each URL.
+
+**Data Collection Process**
+1. Top 675 'hot' posts were pulled from the NBA subreddit as of 5/30/18.
+2. All comments (~180K total) were pulled from each submitted post, based on `post_id`.
+3. Looped through each comment thread to pull the following information from each comment:
+	- `post_id`: identifier for loop
+	- `gilded_status`: whether a comment was given "Reddit gold"
+	- `author_team_flair`: indicator of commenter's favorite team
+	- `top_comment`: whether it was a top-level comment or a threaded reply
+	- `comment_score`: final upvote score
+
+Due to size of data being pulled, the process needed to be chunked into 4 separate comment pulls and mega-concatenated at the end.
+
 
 <a id='explore_data'></a>
 ### Explore Data.
+
+#### Finding and Filling Null Values
 First I took a look at all of the columns to check out the null values in the dataset, specifically trying to find columns which were:
 	- Overwhelmingly null, and should be dropped, or
 	- Partially null, and might have values imputed
 
-<img src="https://i.imgur.com/fB0IXZZ.png">
+<img src="https://i.imgur.com/xqUdBz4.png">
 
-I did a check of % of null values per column and decided to eliminate some columns that have too many nulls to be worthwhile: `['Pool QC', 'Misc Feature', 'Alley', 'Fence', 'Fireplace Qu']`.
+I soon realized that those null values for `flair_text` came from two places:
+	- Deleted comments
+	- Commenters who had not chosen a team flair
+
+Obviously I wanted to drop the deleted comments, as there was no comment text to analyze. Not having a team flair in itself is a choice, so I filled those values with 'no_flair'. 
+```
+mask = df[df['comment_text'] == '[deleted]']
+df = df.drop(mask.index)
+df.flair_text = df.flair_text.fillna('no_flair')
+```
+Now we are ready to move onto the next step!
+
+#### Standardizing Author Team Flair
+
+
 
 For this exercise, I also decided to drop all categorical variables to be able to more easily run different linear regression types. Some features appeared numerical, but were in fact categorical (e.g. `Year Built`).
 
