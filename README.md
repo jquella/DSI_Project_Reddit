@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/PyHuuqq.png">
+<img src="https://i.imgur.com/IchU1oC.png">
 
 # Predicting and Analyzing Top Comments from Reddit
 
